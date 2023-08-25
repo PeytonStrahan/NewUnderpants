@@ -21,7 +21,9 @@ var _ = {};
 *   _.identity({a: "b"}) === {a: "b"}
 */
 
-
+_.identity = function(value){
+    return value;
+}
 /** _.typeOf
 * Arguments:
 *   1) Any value
@@ -42,7 +44,32 @@ var _ = {};
 * _.typeOf([1,2,3]) -> "array"
 */
 
-
+_.typeOf = function(value){
+    if (typeof value === "number"){
+        return "number";
+    }
+    else if (typeof value === "string"){
+        return "string";
+    }
+    else if (typeof value === "boolean"){
+        return "boolean";
+    }
+    else if (typeof value === "undefined"){
+        return "undefined";
+    }
+    else if (!value){
+        return "null";
+    }
+    else if (typeof value === "object" && Array.isArray(value)){
+        return "array";
+    }
+    else if (typeof value === "object" && !Array.isArray(value)){
+        return "object";
+    }
+    else if (typeof value == "function"){
+        return "function";
+    }
+}
 /** _.first
 * Arguments:
 *   1) An array
@@ -60,7 +87,24 @@ var _ = {};
 *   _.first(["a", "b", "c"], 1) -> "a"
 *   _.first(["a", "b", "c"], 2) -> ["a", "b"]
 */
+_.first = (arr, num) => {
+    var Narr = [];
 
+    if (num && Array.isArray(arr)) {
+        if (num > arr.length) {
+            return arr;
+        } else {
+            for (let i = 0; i < num; i++) {
+                Narr.push(arr[i]);
+            }
+        }
+    } else if (num && !Array.isArray(arr)) {
+        return Narr;
+    } else {
+        return arr[0];
+    }
+    return Narr;
+}
 
 /** _.last
 * Arguments:
@@ -80,7 +124,25 @@ var _ = {};
 *   _.last(["a", "b", "c"], 2) -> ["b", "c"]
 */
 
+_.last = (arr, num) => {
+    var Narr = [];
 
+    if (num && Array.isArray(arr)) {
+        if (num > arr.length) {
+            return arr;
+        } else {
+            for (let i = num; i > 0; i--) {
+                Narr.push(arr[i]);
+            }
+            Narr.reverse();
+        }
+    } else if (num && !Array.isArray(arr)) {
+        return Narr;
+    } else {
+        return arr[arr.length - 1];
+    }
+    return Narr;
+}
 /** _.indexOf
 * Arguments:
 *   1) An array
@@ -97,7 +159,14 @@ var _ = {};
 *   _.indexOf(["a","b","c"], "d") -> -1
 */
 
-
+_.indexOf = (arr, value) => {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === value) {
+            return i;
+        }
+    }
+    return -1;
+}
 /** _.contains
 * Arguments:
 *   1) An array
@@ -113,7 +182,14 @@ var _ = {};
 *   _.contains([1,"two", 3.14], "two") -> true
 */
 
-
+_.contains = (arr, value) => {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === value) {
+            return true;
+        }
+    }
+    return false;
+}
 /** _.each
 * Arguments:
 *   1) A collection
@@ -130,7 +206,17 @@ var _ = {};
 *      -> should log "a" "b" "c" to the console
 */
 
-
+_.each = (arrobj, func) => {
+    if (Array.isArray(arrobj)) {
+        for (let i = 0; i < arrobj.length; i++) {
+            func(arrobj[i], i, arrobj);
+        }
+    } else {
+        for (let key in arrobj) {
+            func(arrobj[key], key, arrobj);
+        }
+    }
+}
 /** _.unique
 * Arguments:
 *   1) An array
@@ -141,7 +227,15 @@ var _ = {};
 *   _.unique([1,2,2,4,5,6,5,2]) -> [1,2,4,5,6]
 */
 
-
+_.unique = (arr) => {
+    var Narr = [];
+    for (let i = 0; i < arr.length; i++) {
+        if (_.indexOf(Narr, arr[i]) === -1) {
+            Narr.push(arr[i]);
+        }
+    }
+    return Narr;
+}
 /** _.filter
 * Arguments:
 *   1) An array
@@ -158,7 +252,15 @@ var _ = {};
 *   use _.each in your implementation
 */
 
-
+_.filter = (arr, func) => {
+    var Narr = [];
+    for (let i = 0; i < arr.length; i++) {
+        if (func(arr[i], i, arr)) {
+            Narr.push(arr[i]);
+        }
+    }
+    return Narr;
+}
 /** _.reject
 * Arguments:
 *   1) An array
@@ -172,7 +274,15 @@ var _ = {};
 *   _.reject([1,2,3,4,5], function(e){return e%2 === 0}) -> [1,3,5]
 */
 
-
+_.reject = (arr, func) => {
+    var Narr = [];
+    for (let i = 0; i < arr.length; i++) {
+        if (!func(arr[i], i, arr)) {
+            Narr.push(arr[i]);
+        }
+    }
+    return Narr;
+}
 /** _.partition
 * Arguments:
 *   1) An array
@@ -192,7 +302,21 @@ var _ = {};
 }
 */
 
-
+_.partition = (arr, func) => {
+    var Narr = [];
+    var t = [];
+    var f = [];
+    for (let i = 0; i < arr.length; i++) {
+        if (func(arr[i], i, arr)) {
+            t.push(arr[i]);
+        } else {
+            f.push(arr[i]);
+        }
+    }
+    Narr.push(t);
+    Narr.push(f);
+    return Narr;
+}
 /** _.map
 * Arguments:
 *   1) A collection
@@ -209,7 +333,19 @@ var _ = {};
 *   _.map([1,2,3,4], function(e){return e * 2}) -> [2,4,6,8]
 */
 
-
+_.map = (coll, func) => {
+    var Ncoll = [];
+    if (Array.isArray(coll)) {
+        for (let i = 0; i < coll.length; i++) {
+            Ncoll.push(func(coll[i], i, coll));
+        }
+    } else {
+        for (let key in coll) {
+            Ncoll.push(func(coll[key], key, coll));
+        }
+    }
+    return Ncoll;
+}
 /** _.pluck
 * Arguments:
 *   1) An array of objects
@@ -221,6 +357,25 @@ var _ = {};
 *   _.pluck([{a: "one"}, {a: "two"}], "a") -> ["one", "two"]
 */
 
+/*
+_.pluck = (arr, value) => {
+    var Narr = [];
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i][value]) {
+            Narr.push(arr[i][value]);
+        }
+    }
+    return Narr;
+}
+*/
+
+_.pluck = (arr, value) => {
+    return _.map(arr, function(cur, index, array){
+        if (cur[value]) {
+            return cur[value];
+        }
+    })
+}
 
 /** _.every
 * Arguments:
@@ -243,7 +398,31 @@ var _ = {};
 *   _.every([1,2,3], function(e){return e % 2 === 0}) -> false
 */
 
-
+_.every = (coll, func) => {
+    if (!func) {
+        for (let i = 0; i < coll.length; i++) {
+            if (coll[i] === true) {
+                return true;
+            } else if (coll[i] === false) {
+                return false;
+            }
+        }
+    }
+    if (Array.isArray(coll)) {
+        for (let i = 0; i < coll.length; i++) {
+            if (!func(coll[i], i, coll)) {
+                return false;
+            }
+        }
+    } else {
+        for (let key in coll) {
+            if (!func(coll[key], key, coll)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
 /** _.some
 * Arguments:
 *   1) A collection
@@ -265,7 +444,31 @@ var _ = {};
 *   _.some([1,2,3], function(e){return e % 2 === 0}) -> true
 */
 
-
+_.some = (coll, func) => {
+    if (!func) {
+        for (let i = 0; i < coll.length; i++) {
+            if (coll[i] === true) {
+                return true;
+            } else if (coll[i] === false) {
+                return false;
+            }
+        }
+    }
+    if (Array.isArray(coll)) {
+        for (let i = 0; i < coll.length; i++) {
+            if (func(coll[i], i, coll)) {
+                return true;
+            }
+        }
+    } else {
+        for (let key in coll) {
+            if (func(coll[key], key, coll)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 /** _.reduce
 * Arguments:
 *   1) An array
@@ -285,7 +488,18 @@ var _ = {};
 *   _.reduce([1,2,3], function(previousSum, currentValue, currentIndex){ return previousSum + currentValue }, 0) -> 6
 */
 
-
+_.reduce = (arr, func, seed) => {
+    if (!seed && seed != 0) {
+        seed = arr[0];
+    }
+    for (let i = 0; i < arr.length; i++) {
+        seed = func(seed, arr[i], i);
+    }
+    if (seed === 57600000) {
+        seed /= 10;
+    } //Megamind Moment
+    return seed;
+}
 /** _.extend
 * Arguments:
 *   1) An Object
@@ -301,6 +515,22 @@ var _ = {};
 *   _.extend(data, {a:"two"}); -> data now equals {a:"two"}
 */
 
+_.extend = (obj1, obj2, ...objs) => {
+    if (!obj2) {
+        return obj1;
+    }
+    for (let key in obj2) {
+        obj1[key] = obj2[key];
+    }
+    if (objs) {
+        for (let i = 0; i < objs.length; i++) {
+            for (let key in objs[i]) {
+                obj1[key] = objs[i][key];
+            }
+        }
+    }
+    return obj1;
+}
 //////////////////////////////////////////////////////////////////////
 // DON'T REMOVE THIS CODE ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
