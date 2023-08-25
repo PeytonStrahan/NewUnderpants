@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/OperationSpark/underpants.git"
+    "url": "https://github.com/PeytonStrahan/NewUnderpants.git"
   },
   "author": "jfraboni",
   "license": "CC",
   "bugs": {
-    "url": "https://github.com/OperationSpark/underpants/issues"
+    "url": "https://github.com/PeytonStrahan/NewUnderpants/issues"
   },
-  "homepage": "https://github.com/OperationSpark/underpants",
+  "homepage": "https://github.com/PeytonStrahan/NewUnderpants",
   "devDependencies": {
     "chai": "^3.5.0",
     "istanbul": "^0.4.5",
