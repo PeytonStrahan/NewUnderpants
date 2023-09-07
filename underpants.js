@@ -489,15 +489,16 @@ _.some = (coll, func) => {
 */
 
 _.reduce = (arr, func, seed) => {
-    if (!seed && seed != 0) {
+    if (!seed) {
         seed = arr[0];
+        for (let i = 1; i < arr.length; i++) {
+            seed = func(seed, arr[i], i);
+        }
+    } else {
+        for (let i = 0; i < arr.length; i++) {
+            seed = func(seed, arr[i], i);
+        }
     }
-    for (let i = 0; i < arr.length; i++) {
-        seed = func(seed, arr[i], i);
-    }
-    if (seed === 57600000) {
-        seed /= 10;
-    } //Megamind Moment
     return seed;
 }
 /** _.extend
